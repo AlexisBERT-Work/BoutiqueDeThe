@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title th:text="${titre}">Formulaire Produit</title>
+</head>
+<body>
+<div class="container" style="max-width: 900px; margin: 0 auto;">
+    <h1 th:text="${titre}">Formulaire Produit</h1>
+    <p class="subtitle">Remplissez tous les champs obligatoires</p>
+
+    <form th:action="${produit.id != null} ? @{/modifier/{id}(id=${produit.id})} : @{/enregistrer}"
+          method="post"
+          th:object="${produit}">
+
+        <!-- Informations générales -->
+        <div class="card">
+            <div class="card-title">Informations générales</div>
+
+            <div class="form-group">
+                <label for="nom">Nom du thé <span class="required">*</span></label>
+                <input type="text"
+                       id="nom"
+                       th:field="*{nom}"
+                       placeholder="Ex: Sencha Premium, Earl Grey..."
+                       th:classappend="${#fields.hasErrors('nom')} ? 'error-input'">
+                <span class="error" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="typeThe">Type de thé <span class="required">*</span></label>
+                    <select id="typeThe" th:field="*{typeThe}" th:classappend="${#fields.hasErrors('typeThe')} ? 'error-input'">
+                        <option value="">Sélectionnez un type</option>
+                        <option th:each="type : ${typesThe}" th:value="${type}" th:text="${type}"></option>
+                    </select>
+                    <span class="error" th:if="${#fields.hasErrors('typeThe')}" th:errors="*{typeThe}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="origine">Origine <span class="required">*</span></label>
+                    <select id="origine" th:field="*{origine}" th:classappend="${#fields.hasErrors('origine')} ? 'error-input'">
+                        <option value="">Sélectionnez une origine</option>
+                        <option th:each="orig : ${origines}" th:value="${orig}" th:text="${orig}"></option>
+                    </select>
+                    <span class="error" th:if="${#fields.hasErrors('origine')}" th:errors="*{origine}"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Informations commerciales -->
+        <div class="card">
+            <div class="card-title">Informations commerciales</div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="prix">Prix (€) <span class="required">*</span></label>
+                    <input type="number" id="prix" th:field="*{prix}" step="0.01" min="5" max="100" placeholder="Entre 5€ et 100€"
+                           th:classappend="${#fields.hasErrors('prix')} ? 'error-input'">
+                    <span class="error" th:if="${#fields.hasErrors('prix')}" th:errors="*{prix}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantiteStock">Quantité en stock <span class="required">*</span></label>
+                    <input type="number" id="quantiteStock" th:field="*{quantiteStock}" min="0" placeholder="Ex: 50"
+                           th:classappend="${#fields.hasErrors('quantiteStock')} ? 'error-input'">
+                    <span class="error" th:if="${#fields.hasErrors('quantiteStock')}" th:errors="*{quantiteStock}"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="dateReception">Date de réception <span class="required">*</span></label>
+                <input type="date" id="dateReception" th:field="*{dateReception}"
+                       th:classappend="${#fields.hasErrors('dateReception')} ? 'error-input'">
+                <span class="error" th:if="${#fields.hasErrors('dateReception')}" th:errors="*{dateReception}"></span>
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div class="card">
+            <div class="card-title">Description</div>
+            <div class="form-group">
+                <label for="description">Description du produit</label>
+                <textarea id="description" th:field="*{description}" placeholder="Décrivez les caractéristiques, le goût, les notes aromatiques..."
+                          th:classappend="${#fields.hasErrors('description')} ? 'error-input'"></textarea>
+                <span class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+                <small style="color: #6b7280;">Maximum 500 caractères</small>
+            </div>
+        </div>
+
+        <div class="info-box">
+            Les champs marqués d'un astérisque (<span style="color: #b02a37;">*</span>) sont obligatoires.
+        </div>
+
+        <!-- Boutons -->
+        <div class="btn-group">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <a href="/" class="btn btn-secondary">Annuler</a>
+        </div>
+
+    </form>
+</div>
+</body>
+</html>
